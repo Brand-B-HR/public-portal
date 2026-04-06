@@ -35,7 +35,8 @@ jobs:
 
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: brandb/out
+          ##path: ./brandb/out
+          path: out
 
   deploy:
     runs-on: ubuntu-latest
