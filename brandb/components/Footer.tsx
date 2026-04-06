@@ -1,6 +1,11 @@
 "use client";
 
-import { Building2, Linkedin, Twitter, Instagram, Youtube, ArrowUpCircle } from "lucide-react";
+import { useEffect, useState } from "react";
+import Image from "next/image";
+import { Linkedin, Twitter, Instagram, Youtube, ArrowUpCircle } from "lucide-react";
+
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+const logoSrc = `${basePath}/logo.png`;
 
 const footerLinks: Record<string, string[]> = {
   Company:  ["About Us", "Careers", "Press", "Blog"],
@@ -17,7 +22,12 @@ const socials = [
 ];
 
 export default function Footer() {
+  const [year, setYear] = useState("");
   const scrollTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
+
+  useEffect(() => {
+    setYear(String(new Date().getFullYear()));
+  }, []);
 
   return (
     <footer style={{ background: "#0f172a", color: "#94a3b8" }}>
@@ -104,14 +114,21 @@ export default function Footer() {
                   width: 38,
                   height: 38,
                   borderRadius: 12,
-                  background: "linear-gradient(135deg, #3b82f6, #0ea5e9)",
+                  background: "#ffffff",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
                   boxShadow: "0 4px 12px rgba(59,130,246,0.25)",
+                  overflow: "hidden",
                 }}
               >
-                <Building2 size={18} color="#fff" />
+                <Image
+                  src={logoSrc}
+                  alt="Brand B logo"
+                  width={38}
+                  height={38}
+                  style={{ width: "100%", height: "100%", objectFit: "contain" }}
+                />
               </div>
               <span style={{ color: "#fff", fontWeight: 800, fontSize: 20, fontFamily: "var(--font-display)" }}>
                 Brand B
@@ -195,7 +212,9 @@ export default function Footer() {
           }}
         >
           <p style={{ fontSize: 13, color: "#475569" }}>
-            © {new Date().getFullYear()} Brand B, Inc. All rights reserved.
+            {year
+              ? `© ${year} Brand B, Inc. All rights reserved.`
+              : "© Brand B, Inc. All rights reserved."}
           </p>
           <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 20 }}>
             {["Privacy Policy", "Terms of Service", "Cookie Policy", "Accessibility"].map(
