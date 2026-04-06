@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "bun run build",
+    "build": "next build",
     "start": "next start",
     "lint": "eslint"
   },
@@ -26,7 +26,8 @@
     "eslint-config-next": "16.2.2",
     "tailwindcss": "^4",
     "typescript": "^5",
-    "autoprefixer": "^10.0.1"
+    "autoprefixer": "^10.0.1",
+    "@types/bun": "latest"
   },
   "ignoreScripts": [
     "sharp",
