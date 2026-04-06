@@ -1,8 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { Building2, Menu, X, ChevronRight } from "lucide-react";
+import { Menu, X, ChevronRight } from "lucide-react";
+
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+const logoSrc = `${basePath}/logo.png`;
 
 const navLinks = [
   { label: "About",    href: "#about" },
@@ -72,14 +76,22 @@ export default function Navbar() {
               width: 38,
               height: 38,
               borderRadius: 12,
-              background: "linear-gradient(135deg, #3b82f6, #0ea5e9)",
+              background: "#ffffff",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               boxShadow: "0 4px 12px rgba(59,130,246,0.3)",
+              overflow: "hidden",
             }}
           >
-            <Building2 size={18} color="#fff" />
+            <Image
+              src={logoSrc}
+              alt="Brand B logo"
+              width={38}
+              height={38}
+              priority
+              style={{ width: "100%", height: "100%", objectFit: "contain" }}
+            />
           </div>
           <span
             className="gradient-text"

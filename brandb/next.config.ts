@@ -1,13 +1,18 @@
 import type { NextConfig } from "next";
 
+const basePath = "/public-portal";
+const assetPrefix = basePath ? `${basePath}/` : "";
+
 const nextConfig: NextConfig = {
-  /* config options here */
-  output: 'export',
- basePath: "/public-portal",
- assetPrefix: "/public-portal/",
+  output: "export",
+  basePath,
+  assetPrefix,
   images: {
-    unoptimized: true
-  }
+    unoptimized: true,
+  },
+  env: {
+    NEXT_PUBLIC_BASE_PATH: basePath,
+  },
 };
 
 export default nextConfig;
