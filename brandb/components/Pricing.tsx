@@ -1,256 +1,429 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Check, Sparkles, ArrowRight } from "lucide-react";
+import {
+  ArrowRight,
+  BriefcaseBusiness,
+  CheckCircle2,
+  FileText,
+  HelpCircle,
+  Rocket,
+  School,
+  Shield,
+  Smartphone,
+  RefreshCw,
+  Sparkles,
+  Users,
+  Building2,
+} from "lucide-react";
 import { useInView } from "@/lib/useInView";
+
+const configuredAdminPortalUrl = process.env.NEXT_PUBLIC_ADMIN_PORTAL_URL;
+const productionAdminPortalUrl = "https://orange-rock-0b4501700.2.azurestaticapps.net";
 
 const plans = [
   {
-    name: "Basic",
-    price: "$49",
-    period: "/ month",
-    description: "Perfect for small teams just getting started with HR management.",
-    popular: false,
-    cta: "Start Free Trial",
+    badge: "Free Trial",
+    badgeStyle: "free",
+    name: "Starter",
+    price: "$0",
+    period: "/ 1 month",
+    tagline: "Try Brand B HR with no commitment.",
+    icon: Rocket,
+    iconColor: "#64748b",
+    iconBg: "linear-gradient(135deg, #f1f5f9, #e2e8f0)",
+    buttonLabel: "Start Free Trial",
+    buttonColor: "#22c55e",
+    action: "#contact",
     features: [
-      "Up to 25 employees",
-      "Core payroll processing",
-      "Basic recruitment module",
-      "Leave & attendance tracking",
-      "Employee self-service portal",
-      "Email support (48-hr SLA)",
+      "Up to 10 employees",
+      "Full access to all HR features",
+      "Automated recruiting tools",
+      "Employee management dashboard",
+      "Intern discovery access",
     ],
   },
   {
+    badge: "Most Popular",
+    badgeStyle: "popular",
     name: "Standard",
-    price: "$129",
-    period: "/ month",
-    description: "Ideal for growing companies that need deeper HR capabilities.",
+    price: "$10",
+    period: "/ year",
+    tagline: "Perfect for growing small and medium businesses.",
+    icon: BriefcaseBusiness,
+    iconColor: "#2563eb",
+    iconBg: "linear-gradient(135deg, #dbeafe, #bfdbfe)",
+    buttonLabel: "Get Started",
+    buttonColor: "#2563eb",
+    action: "#contact",
     popular: true,
-    cta: "Get Started",
     features: [
-      "Up to 150 employees",
-      "Full payroll + tax compliance",
-      "Advanced recruitment & ATS",
-      "Training & LMS integration",
-      "HR policy templates library",
-      "Performance management",
-      "Advanced analytics dashboard",
-      "Priority support (24-hr SLA)",
+      "Up to 100 employees",
+      "All Starter features included",
+      "Priority email support",
+      "Advanced recruitment analytics",
+      "Performance tracking",
     ],
   },
   {
-    name: "Premium",
-    price: "$299",
-    period: "/ month",
-    description: "Enterprise-grade HR for large organisations with complex needs.",
-    popular: false,
-    cta: "Contact Sales",
+    badge: "Enterprise",
+    badgeStyle: "business",
+    name: "Business",
+    price: "$20",
+    period: "/ year",
+    tagline: "Built for large organisations with no limits.",
+    icon: Building2,
+    iconColor: "#16a34a",
+    iconBg: "linear-gradient(135deg, #dcfce7, #bbf7d0)",
+    buttonLabel: "Get Started",
+    buttonColor: "#1e3a8a",
+    action: "#contact",
     features: [
       "Unlimited employees",
-      "Multi-country payroll",
-      "Custom workflow automation",
-      "AI-driven HR analytics",
-      "Compliance monitoring (40+ countries)",
-      "Dedicated Customer Success Manager",
-      "Custom integrations & API access",
-      "24/7 phone & chat support",
-      "SLA guarantee",
+      "All Standard features included",
+      "Dedicated account manager",
+      "Custom onboarding and training",
+      "24/7 priority support",
     ],
+  },
+];
+
+const perks = [
+  { icon: Shield, label: "Secure data storage" },
+  { icon: RefreshCw, label: "Regular platform updates" },
+  { icon: Users, label: "Job seeker and student portal" },
+  { icon: Smartphone, label: "Web and mobile access" },
+  { icon: School, label: "Intern discovery pool" },
+  { icon: FileText, label: "CV portfolio management" },
+];
+
+const faqs = [
+  {
+    title: "What happens when my free trial ends?",
+    body: "Your account is simply deactivated. We will never charge you automatically. You can upgrade at any time to reactivate and keep your data.",
+  },
+  {
+    title: "Can I upgrade before the trial expires?",
+    body: "Yes. You can switch to a paid plan at any point during or after the free trial without losing any of your existing data.",
+  },
+  {
+    title: "Are annual plans billed all at once?",
+    body: "Yes, both the Standard ($10) and Business ($20) plans are billed once per year. There are no monthly instalments or hidden fees.",
+  },
+  {
+    title: "Can I downgrade or cancel my plan?",
+    body: "You can contact us at any time to adjust your plan. Cancellations take effect at the end of the current billing period.",
   },
 ];
 
 export default function Pricing() {
   const { ref, inView } = useInView();
 
+  const goToAdminPortal = () => {
+    const isLocalHost =
+      window.location.hostname === "localhost" ||
+      window.location.hostname === "127.0.0.1";
+    const adminPortalUrl =
+      configuredAdminPortalUrl ??
+      (isLocalHost ? "http://localhost:4200" : productionAdminPortalUrl);
+
+    window.location.href = adminPortalUrl;
+  };
+
   return (
     <section id="pricing" className="section-py" style={{ background: "#ffffff" }}>
       <div ref={ref} className="container-main">
-        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          style={{ textAlign: "center", marginBottom: 48 }}
+          style={{
+            background: "linear-gradient(135deg, #2563eb 0%, #1e3a8a 58%, #166534 100%)",
+            borderRadius: 34,
+            color: "#ffffff",
+            textAlign: "center",
+            padding: "62px 24px 56px",
+            boxShadow: "0 30px 80px -55px rgba(30, 64, 175, 0.65)",
+            marginBottom: 52,
+          }}
         >
-          <span className="section-badge">Transparent Pricing</span>
-          <h2 className="section-title">
-            Plans that grow{" "}
-            <span className="gradient-text">with you</span>
-          </h2>
-          <p className="section-subtitle">
-            No hidden fees, no long-term lock-in. Start with what you need and scale up whenever you&apos;re ready.
-          </p>
+          <div style={{ maxWidth: 760, margin: "0 auto" }}>
+            <p
+              style={{
+                fontSize: 13,
+                fontWeight: 700,
+                textTransform: "uppercase",
+                letterSpacing: "0.14em",
+                color: "#86efac",
+                marginBottom: 14,
+              }}
+            >
+              Simple, Transparent Pricing
+            </p>
+            <h2
+              style={{
+                fontFamily: "var(--font-display)",
+                fontSize: 46,
+                fontWeight: 800,
+                lineHeight: 1.12,
+                marginBottom: 18,
+              }}
+              className="pricing-hero-title"
+            >
+              Choose the Plan That Fits Your Business
+            </h2>
+            <p
+              style={{
+                color: "#dbeafe",
+                fontSize: 17,
+                lineHeight: 1.8,
+                maxWidth: 700,
+                margin: "0 auto",
+              }}
+            >
+              Start free and scale as you grow. No hidden fees, no surprises.
+            </p>
+          </div>
         </motion.div>
 
-        {/* Cards */}
-        <div className="grid-pricing">
-          {plans.map((plan, i) => (
+        <div className="portal-pricing-grid" style={{ marginBottom: 54 }}>
+          {plans.map((plan, index) => (
             <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 30 }}
+              key={plan.name}
+              initial={{ opacity: 0, y: 28 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.55, delay: i * 0.12 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
               style={{
                 position: "relative",
+                background: "#ffffff",
+                borderRadius: 24,
+                padding: "32px 28px",
+                boxShadow: plan.popular
+                  ? "0 18px 48px -26px rgba(37, 99, 235, 0.28)"
+                  : "0 10px 32px -22px rgba(15, 23, 42, 0.18)",
+                borderTop: `4px solid ${
+                  plan.popular ? "#2563eb" : plan.badgeStyle === "business" ? "#1e3a8a" : "#e2e8f0"
+                }`,
+                transform: plan.popular ? "scale(1.03)" : "none",
                 display: "flex",
                 flexDirection: "column",
-                borderRadius: 24,
-                background: plan.popular
-                  ? "linear-gradient(135deg, #3b82f6, #2563eb, #0ea5e9)"
-                  : "#ffffff",
-                border: plan.popular
-                  ? "2px solid #3b82f6"
-                  : "2px solid #e2e8f0",
-                overflow: "hidden",
-                transition: "all 0.3s ease",
-                boxShadow: plan.popular
-                  ? "0 20px 60px rgba(59,130,246,0.25)"
-                  : "0 4px 20px rgba(59,130,246,0.06)",
-                transform: plan.popular ? "scale(1)" : "scale(1)",
+                gap: 22,
               }}
-              className={plan.popular ? "" : "card-base"}
+              className={plan.popular ? "portal-plan-popular" : undefined}
             >
-              {/* Popular badge */}
-              {plan.popular && (
-                <div style={{ display: "flex", justifyContent: "center" }}>
-                  <span
-                    style={{
-                      padding: "6px 18px",
-                      fontSize: 11,
-                      fontWeight: 700,
-                      color: "#fff",
-                      background: "linear-gradient(90deg, #f59e0b, #f97316)",
-                      borderRadius: "0 0 12px 12px",
-                      display: "inline-flex",
-                      alignItems: "center",
-                      gap: 6,
-                    }}
-                  >
-                    <Sparkles size={11} /> Most Popular
-                  </span>
-                </div>
-              )}
-
               <div
                 style={{
-                  padding: plan.popular ? "32px 28px 28px" : "28px",
-                  display: "flex",
-                  flexDirection: "column",
-                  flex: 1,
+                  position: "absolute",
+                  top: -1,
+                  right: 24,
+                  padding: "6px 12px",
+                  borderRadius: "0 0 12px 12px",
+                  fontSize: 11,
+                  fontWeight: 700,
+                  textTransform: "uppercase",
+                  letterSpacing: "0.08em",
+                  background:
+                    plan.badgeStyle === "free"
+                      ? "#f0fdf4"
+                      : plan.badgeStyle === "popular"
+                        ? "#2563eb"
+                        : "#1e3a8a",
+                  color:
+                    plan.badgeStyle === "free"
+                      ? "#16a34a"
+                      : plan.badgeStyle === "popular"
+                        ? "#ffffff"
+                        : "#bfdbfe",
+                  border:
+                    plan.badgeStyle === "free" ? "1px solid #bbf7d0" : "1px solid transparent",
                 }}
               >
-                {/* Plan name */}
-                <div style={{ marginBottom: 24 }}>
-                  <span
-                    style={{
-                      display: "inline-block",
-                      padding: "4px 12px",
-                      fontSize: 12,
-                      fontWeight: 600,
-                      borderRadius: 999,
-                      marginBottom: 12,
-                      background: plan.popular ? "rgba(255,255,255,0.2)" : "#eff6ff",
-                      color: plan.popular ? "#fff" : "#2563eb",
-                    }}
-                  >
-                    {plan.name} Plan
+                {plan.badgeStyle === "popular" ? (
+                  <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+                    <Sparkles size={12} />
+                    {plan.badge}
                   </span>
-                  <div style={{ display: "flex", alignItems: "flex-end", gap: 4, marginBottom: 8 }}>
-                    <span
-                      style={{
-                        fontSize: 40,
-                        fontWeight: 800,
-                        color: plan.popular ? "#fff" : "#0f172a",
-                        fontFamily: "var(--font-display)",
-                      }}
-                    >
-                      {plan.price}
-                    </span>
-                    <span style={{ fontSize: 14, color: plan.popular ? "rgba(255,255,255,0.7)" : "#94a3b8", marginBottom: 8 }}>
-                      {plan.period}
-                    </span>
-                  </div>
-                  <p style={{ fontSize: 13, color: plan.popular ? "rgba(255,255,255,0.75)" : "#64748b", lineHeight: 1.6 }}>
-                    {plan.description}
-                  </p>
-                </div>
+                ) : (
+                  plan.badge
+                )}
+              </div>
 
-                {/* Divider */}
-                <div style={{ height: 1, background: plan.popular ? "rgba(255,255,255,0.2)" : "#f1f5f9", marginBottom: 24 }} />
-
-                {/* Features */}
-                <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: 12, flex: 1, marginBottom: 28 }}>
-                  {plan.features.map((f, j) => (
-                    <li key={j} style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
-                      <div
-                        style={{
-                          width: 20,
-                          height: 20,
-                          borderRadius: "50%",
-                          background: plan.popular ? "rgba(255,255,255,0.25)" : "#eff6ff",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          flexShrink: 0,
-                          marginTop: 2,
-                        }}
-                      >
-                        <Check size={11} color={plan.popular ? "#fff" : "#2563eb"} strokeWidth={3} />
-                      </div>
-                      <span style={{ fontSize: 13, color: plan.popular ? "rgba(255,255,255,0.9)" : "#475569", lineHeight: 1.5 }}>
-                        {f}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-
-                {/* CTA */}
-                <button
+              <div style={{ textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", gap: 10 }}>
+                <div
                   style={{
-                    width: "100%",
-                    padding: "14px 0",
-                    borderRadius: 14,
-                    fontWeight: 600,
-                    fontSize: 14,
+                    width: 60,
+                    height: 60,
+                    borderRadius: "50%",
+                    background: plan.iconBg,
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    gap: 8,
-                    cursor: "pointer",
-                    transition: "all 0.2s ease",
-                    border: plan.popular ? "none" : "1.5px solid #bfdbfe",
-                    background: plan.popular ? "#ffffff" : "transparent",
-                    color: plan.popular ? "#1d4ed8" : "#2563eb",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = "translateY(-2px)";
-                    e.currentTarget.style.boxShadow = "0 4px 16px rgba(59,130,246,0.15)";
-                    if (!plans[i].popular) e.currentTarget.style.background = "#eff6ff";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = "translateY(0)";
-                    e.currentTarget.style.boxShadow = "none";
-                    if (!plans[i].popular) e.currentTarget.style.background = "transparent";
                   }}
                 >
-                  {plan.cta} <ArrowRight size={14} />
-                </button>
+                  <plan.icon size={28} color={plan.iconColor} />
+                </div>
+                <h3 style={{ fontSize: 24, fontWeight: 800, color: "#0f172a" }}>{plan.name}</h3>
+                <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "center", gap: 4 }}>
+                  <span style={{ fontSize: 44, fontWeight: 800, color: "#0f172a", lineHeight: 1, fontFamily: "var(--font-display)" }}>
+                    {plan.price}
+                  </span>
+                  <span style={{ fontSize: 14, color: "#64748b", marginBottom: 8 }}>{plan.period}</span>
+                </div>
+                <p style={{ fontSize: 14, lineHeight: 1.7, color: "#64748b" }}>{plan.tagline}</p>
+              </div>
+
+              <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 12, flex: 1 }}>
+                {plan.features.map((feature) => (
+                  <li key={feature} style={{ display: "flex", alignItems: "flex-start", gap: 10, color: "#64748b", fontSize: 14, lineHeight: 1.6 }}>
+                    <CheckCircle2 size={18} color="#16a34a" style={{ flexShrink: 0, marginTop: 1 }} />
+                    <span>{feature}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <button
+                onClick={goToAdminPortal}
+                className="btn-primary"
+                style={{
+                  width: "100%",
+                  background: plan.buttonColor,
+                  borderRadius: 999,
+                  boxShadow: "none",
+                }}
+              >
+                {plan.buttonLabel} <ArrowRight size={18} />
+              </button>
+            </motion.div>
+          ))}
+        </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.5, delay: 0.15 }}
+          style={{ textAlign: "center", marginBottom: 26 }}
+        >
+          <h3 className="section-title" style={{ marginBottom: 12 }}>
+            All Plans Include
+          </h3>
+        </motion.div>
+
+        <div className="portal-pricing-perks" style={{ marginBottom: 58 }}>
+          {perks.map((perk, index) => (
+            <motion.div
+              key={perk.label}
+              initial={{ opacity: 0, y: 20 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.45, delay: 0.22 + index * 0.05 }}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 12,
+                background: "#ffffff",
+                borderRadius: 16,
+                padding: "16px 18px",
+                boxShadow: "0 8px 24px -20px rgba(15, 23, 42, 0.22)",
+                color: "#64748b",
+                fontSize: 14,
+                fontWeight: 600,
+              }}
+            >
+              <perk.icon size={20} color="#2563eb" />
+              <span>{perk.label}</span>
+            </motion.div>
+          ))}
+        </div>
+
+        <div style={{ textAlign: "center", marginBottom: 26 }}>
+          <h3 className="section-title" style={{ marginBottom: 12 }}>
+            Common Questions
+          </h3>
+        </div>
+
+        <div className="portal-pricing-faqs" style={{ marginBottom: 58 }}>
+          {faqs.map((faq, index) => (
+            <motion.div
+              key={faq.title}
+              initial={{ opacity: 0, y: 22 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.45, delay: 0.26 + index * 0.06 }}
+              style={{
+                display: "flex",
+                gap: 14,
+                background: "#ffffff",
+                borderRadius: 18,
+                padding: "22px 20px",
+                boxShadow: "0 10px 30px -22px rgba(15, 23, 42, 0.2)",
+              }}
+            >
+              <HelpCircle size={20} color="#2563eb" style={{ flexShrink: 0, marginTop: 2 }} />
+              <div>
+                <h4 style={{ fontSize: 15, fontWeight: 700, color: "#0f172a", marginBottom: 8 }}>{faq.title}</h4>
+                <p style={{ fontSize: 14, lineHeight: 1.75, color: "#64748b" }}>{faq.body}</p>
               </div>
             </motion.div>
           ))}
         </div>
 
-        {/* Bottom note */}
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={inView ? { opacity: 1 } : {}}
-          transition={{ duration: 0.6, delay: 0.6 }}
-          style={{ textAlign: "center", fontSize: 13, color: "#94a3b8", marginTop: 36 }}
-        >
-          All plans include a 14-day free trial. No credit card required. Cancel anytime.
-        </motion.p>
       </div>
+
+      <style jsx>{`
+        .portal-pricing-grid {
+          display: grid;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 28px;
+          align-items: start;
+        }
+
+        .portal-pricing-perks {
+          display: grid;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 16px;
+          max-width: 920px;
+          margin-left: auto;
+          margin-right: auto;
+        }
+
+        .portal-pricing-faqs {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 18px;
+          max-width: 920px;
+          margin-left: auto;
+          margin-right: auto;
+        }
+
+        @media (max-width: 1023px) {
+          .portal-pricing-grid {
+            grid-template-columns: 1fr;
+            max-width: 520px;
+            margin-left: auto;
+            margin-right: auto;
+          }
+
+          .portal-pricing-perks {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+          }
+
+          .portal-pricing-faqs {
+            grid-template-columns: 1fr;
+          }
+        }
+
+        @media (max-width: 767px) {
+          .pricing-hero-title {
+            font-size: 34px !important;
+          }
+
+          .portal-plan-popular {
+            transform: none !important;
+          }
+
+          .portal-pricing-perks {
+            grid-template-columns: 1fr;
+          }
+        }
+      `}</style>
     </section>
   );
 }

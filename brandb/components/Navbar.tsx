@@ -7,14 +7,14 @@ import { Menu, X, ChevronRight } from "lucide-react";
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 const logoSrc = `${basePath}/logo.png`;
+const configuredAdminPortalUrl = process.env.NEXT_PUBLIC_ADMIN_PORTAL_URL;
+const productionAdminPortalUrl = "https://orange-rock-0b4501700.2.azurestaticapps.net";
 
 const navLinks = [
-  { label: "About",    href: "#about" },
-  { label: "Services", href: "#services" },
-  { label: "Features", href: "#features" },
-  { label: "Clients",  href: "#clients" },
-  { label: "Pricing",  href: "#pricing" },
-  { label: "Contact",  href: "#contact" },
+  { label: "About Us",     href: "#about" },
+  { label: "Our Services", href: "#services" },
+  { label: "Pricing",      href: "#pricing" },
+  { label: "Our Team",     href: "#contact" },
 ];
 
 export default function Navbar() {
@@ -30,6 +30,18 @@ export default function Navbar() {
   const scrollTo = (href: string) => {
     setOpen(false);
     document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const goToAdminPortal = () => {
+    const isLocalHost =
+      window.location.hostname === "localhost" ||
+      window.location.hostname === "127.0.0.1";
+    const adminPortalUrl =
+      configuredAdminPortalUrl ??
+      (isLocalHost ? "http://localhost:4200" : productionAdminPortalUrl);
+
+    setOpen(false);
+    window.location.href = adminPortalUrl;
   };
 
   return (
@@ -179,7 +191,7 @@ export default function Navbar() {
             Contact Us
           </button>
           <button
-            onClick={() => scrollTo("#pricing")}
+            onClick={goToAdminPortal}
             className="btn-primary"
             style={{
               padding: "10px 22px",
@@ -259,7 +271,7 @@ export default function Navbar() {
               ))}
               <li style={{ paddingTop: 8 }}>
                 <button
-                  onClick={() => scrollTo("#pricing")}
+                  onClick={goToAdminPortal}
                   className="btn-primary"
                   style={{ width: "100%", padding: "12px 20px", fontSize: 14, borderRadius: 12 }}
                 >
