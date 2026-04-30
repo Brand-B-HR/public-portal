@@ -23,6 +23,7 @@ const productionAdminPortalUrl = "https://orange-rock-0b4501700.2.azurestaticapp
 
 const plans = [
   {
+    planCode: "starter",
     badge: "Free Trial",
     badgeStyle: "free",
     name: "Starter",
@@ -44,6 +45,7 @@ const plans = [
     ],
   },
   {
+    planCode: "standard",
     badge: "Most Popular",
     badgeStyle: "popular",
     name: "Standard",
@@ -66,6 +68,7 @@ const plans = [
     ],
   },
   {
+    planCode: "business",
     badge: "Enterprise",
     badgeStyle: "business",
     name: "Business",
@@ -119,7 +122,7 @@ const faqs = [
 export default function Pricing() {
   const { ref, inView } = useInView();
 
-  const goToAdminPortal = () => {
+  const goToAdminPortal = (planCode?: string) => {
     const isLocalHost =
       window.location.hostname === "localhost" ||
       window.location.hostname === "127.0.0.1";
@@ -127,7 +130,12 @@ export default function Pricing() {
       configuredAdminPortalUrl ??
       (isLocalHost ? "http://localhost:4200" : productionAdminPortalUrl);
 
-    window.location.href = adminPortalUrl;
+    const url = new URL(adminPortalUrl);
+    if (planCode) {
+      url.searchParams.set("plan", planCode);
+    }
+
+    window.location.href = url.toString();
   };
 
   return (
@@ -282,7 +290,7 @@ export default function Pricing() {
               </ul>
 
               <button
-                onClick={goToAdminPortal}
+                onClick={() => goToAdminPortal(plan.planCode)}
                 className="btn-primary"
                 style={{
                   width: "100%",
