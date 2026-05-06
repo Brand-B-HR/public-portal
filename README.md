@@ -27,6 +27,9 @@ The current homepage renders a single-page scrolling experience with these secti
 6. Footer
 7. Scroll progress indicator
 
+## Environment URLs
+- https://brand-b-hr.github.io/public-portal/
+
 ## Main Features
 
 ### Responsive Navigation
