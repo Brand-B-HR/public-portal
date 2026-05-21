@@ -14,7 +14,7 @@ const navLinks = [
   { label: "About Us",     href: "#about" },
   { label: "Our Services", href: "#services" },
   { label: "Pricing",      href: "#pricing" },
-  { label: "Our Team",     href: "#contact" },
+  { label: "Contact Us",   href: "#contact" },
 ];
 
 export default function Navbar() {
@@ -98,7 +98,7 @@ export default function Navbar() {
           >
             <Image
               src={logoSrc}
-              alt="Brand B logo"
+              alt="Brand B HR logo"
               width={38}
               height={38}
               priority
@@ -113,7 +113,7 @@ export default function Navbar() {
               fontWeight: 800,
             }}
           >
-            Brand B
+            Brand B HR
           </span>
         </button>
 

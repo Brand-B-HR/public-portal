@@ -23,7 +23,7 @@ const services = [
     icon: Bot,
     title: "Automated Recruiting",
     desc:
-      "Streamline your entire hiring pipeline with intelligent automation. Post job listings, screen applicants, schedule interviews, and track candidates without the manual overhead.",
+      "Streamline your entire hiring pipeline with intelligent automation.",
     accent: "#2563eb",
     bg: "linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%)",
     featured: true,
@@ -37,11 +37,11 @@ const services = [
     icon: Users,
     title: "Employee Management",
     desc:
-      "Centralise your entire workforce in one dashboard. Manage employee records, roles, departments, and performance with full visibility and control.",
+      "Centralize your workforce in one dashboard.",
     accent: "#16a34a",
     bg: "linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%)",
     highlights: [
-      "Centralised employee profiles",
+      "Centralized employee profiles",
       "Role and department management",
       "Performance tracking",
     ],
@@ -50,41 +50,40 @@ const services = [
     icon: FileText,
     title: "CV Portfolio and HR Mentoring",
     desc:
-      "Students and graduates can upload their CVs directly into our platform. HR consultants review each profile and provide personalised feedback to help candidates stand out.",
+      "Students and graduates can upload their CVs and get expert HR feedback.",
     accent: "#2563eb",
     bg: "linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%)",
     highlights: [
-      "Easy CV upload and management",
-      "HR consultant reviews and comments",
-      "Career development guidance",
+      "Easy CV upload",
+      "HR reviews and feedback",
+      "Career guidance",
     ],
   },
   {
     icon: Search,
-    title: "Intern Discovery for Businesses",
+    title: "Intern Discovery",
     desc:
-      "Tap into our curated talent pool of verified student CVs. Businesses can browse, filter, and connect with the right intern candidates quickly.",
+      "Businesses can find interns from a verified student pool.",
     accent: "#16a34a",
     bg: "linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%)",
     highlights: [
-      "Verified student CV pool",
-      "Smart filtering by skills and field",
-      "Direct connection with candidates",
+      "Verified CV pool",
+      "Skill-based filtering",
+      "Direct connections",
     ],
   },
   {
     icon: Briefcase,
     title: "Job Application Portal",
     desc:
-      "Job seekers can discover and apply for positions directly through Brand B HR. Browse verified listings, submit applications in minutes, and track every application in one dashboard.",
+      "Job seekers can apply and track applications easily.",
     accent: "#2563eb",
     bg: "linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%)",
     wide: true,
     highlights: [
       "Verified job listings",
       "One-click applications",
-      "Real-time application status tracking",
-      "Personalised job recommendations",
+      "Application tracking",
     ],
   },
 ];

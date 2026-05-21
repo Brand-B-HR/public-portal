@@ -64,7 +64,7 @@ export default function Footer() {
               >
                 <Image
                   src={logoSrc}
-                  alt="Brand B logo"
+                  alt="Brand B HR logo"
                   width={38}
                   height={38}
                   style={{ width: "100%", height: "100%", objectFit: "contain" }}
@@ -78,7 +78,7 @@ export default function Footer() {
                   fontFamily: "var(--font-display)",
                 }}
               >
-                Brand B
+                Brand B HR
               </span>
             </button>
             <p
@@ -90,8 +90,9 @@ export default function Footer() {
                 maxWidth: 280,
               }}
             >
-              Smart HR Solutions for Modern Businesses. Empowering teams to do their best work
-              every single day.
+              Empowering Businesses with Smart HR Solutions. An integrated HR management platform
+              designed to streamline your workforce operations from recruitment to employee
+              management in one stop shop.
             </p>
             <div style={{ display: "flex", gap: 8 }}>
               {socials.map(({ icon: Icon, label }, i) => (
