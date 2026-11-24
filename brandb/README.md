@@ -1,15 +1,10 @@
-# brandb
+# Brand B HR Public Portal
 
-To install dependencies:
-
-```bash
-bun install
-```
-
-To run:
+Next.js static site. See [GITHUB_WIKI.md](../GITHUB_WIKI.md) for pages, structure and configuration.
 
 ```bash
-bun run 
+npm install
+npm run dev     # http://localhost:3000/public-portal
+npm run build   # static export to out/
+npm test
 ```
-
-This project was created using `bun init` in bun v1.3.3. [Bun](https://bun.com) is a fast all-in-one JavaScript runtime.

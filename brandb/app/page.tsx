@@ -1,23 +1,28 @@
-"use client";
-
-import Navbar        from "@/components/Navbar";
-import About         from "@/components/About";
-import Services      from "@/components/Services";
-import Pricing       from "@/components/Pricing";
-import Contact       from "@/components/Contact";
-import Footer        from "@/components/Footer";
-import ScrollProgress from "@/components/ScrollProgress";
+import CtaSection from "@/components/landing/CtaSection";
+import FaqSection from "@/components/landing/FaqSection";
+import HeroSection from "@/components/landing/HeroSection";
+import HowItWorksSection from "@/components/landing/HowItWorksSection";
+import ModulesSection from "@/components/landing/ModulesSection";
+import PricingSection from "@/components/landing/PricingSection";
+import SiteFooter from "@/components/landing/SiteFooter";
+import SiteNav from "@/components/landing/SiteNav";
+import WhySection from "@/components/landing/WhySection";
+import "./landing.css";
 
 export default function Home() {
   return (
-    <main className="overflow-x-hidden">
-      <ScrollProgress />
-      <Navbar />
-      <About />
-      <Services />
-      <Pricing />
-      <Contact />
-      <Footer />
-    </main>
+    <div className="lp" id="top">
+      <SiteNav />
+      <main>
+        <HeroSection />
+        <WhySection />
+        <ModulesSection />
+        <PricingSection />
+        <HowItWorksSection />
+        <FaqSection />
+        <CtaSection />
+      </main>
+      <SiteFooter />
+    </div>
   );
 }

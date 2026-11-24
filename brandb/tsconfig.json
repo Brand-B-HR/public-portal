@@ -13,6 +13,12 @@
     "isolatedModules": true,
     "jsx": "react-jsx",
     "incremental": true,
+    // vitest runs with `globals: true`, so describe/it/expect/vi are ambient in the test files
+    // and the mocks. Without naming it here, `next build` type-checks those files and fails on
+    // names it cannot see — which blocked the production build regardless of any page.
+    // "node" stays listed because narrowing `types` at all turns off automatic @types discovery,
+    // and process.env would stop resolving.
+    "types": ["vitest/globals", "node"],
     "plugins": [
       {
         "name": "next"
