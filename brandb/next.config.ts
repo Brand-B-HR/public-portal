@@ -1,6 +1,6 @@
 import type { NextConfig } from "next";
 
-const basePath = "/public-portal";
+const basePath = process.env.VERCEL ? "" : "/public-portal";
 const assetPrefix = basePath ? `${basePath}/` : "";
 
 const nextConfig: NextConfig = {
