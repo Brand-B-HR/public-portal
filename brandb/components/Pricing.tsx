@@ -24,34 +24,32 @@ const productionAdminPortalUrl = "https://orange-rock-0b4501700.2.azurestaticapp
 const plans = [
   {
     planCode: "starter",
-    badge: "Free Trial",
+    badge: "Starter Plan",
     badgeStyle: "free",
     name: "Starter",
     price: "$0",
-    period: "/ 1 month",
-    tagline: "Try Brand B HR with no commitment.",
+    period: "/ month",
+    tagline: "Get started with core HR features.",
     icon: Rocket,
     iconColor: "#64748b",
     iconBg: "linear-gradient(135deg, #f1f5f9, #e2e8f0)",
-    buttonLabel: "Start Free Trial",
+    buttonLabel: "Get Started",
     buttonColor: "#22c55e",
     action: "#contact",
     features: [
       "Up to 10 employees",
-      "Full access to all HR features",
-      "Automated recruiting tools",
-      "Employee management dashboard",
-      "Intern discovery access",
+      "Full HR features",
+      "Recruitment tools",
     ],
   },
   {
     planCode: "standard",
-    badge: "Most Popular",
+    badge: "Standard Plan",
     badgeStyle: "popular",
     name: "Standard",
     price: "$10",
     period: "/ year",
-    tagline: "Perfect for growing small and medium businesses.",
+    tagline: "Ideal for growing teams.",
     icon: BriefcaseBusiness,
     iconColor: "#2563eb",
     iconBg: "linear-gradient(135deg, #dbeafe, #bfdbfe)",
@@ -61,20 +59,18 @@ const plans = [
     popular: true,
     features: [
       "Up to 100 employees",
-      "All Starter features included",
-      "Priority email support",
-      "Advanced recruitment analytics",
-      "Performance tracking",
+      "Advanced analytics",
+      "Priority support",
     ],
   },
   {
     planCode: "business",
-    badge: "Enterprise",
+    badge: "Business Plan",
     badgeStyle: "business",
     name: "Business",
     price: "$20",
     period: "/ year",
-    tagline: "Built for large organisations with no limits.",
+    tagline: "Built for large organizations.",
     icon: Building2,
     iconColor: "#16a34a",
     iconBg: "linear-gradient(135deg, #dcfce7, #bbf7d0)",
@@ -83,10 +79,8 @@ const plans = [
     action: "#contact",
     features: [
       "Unlimited employees",
-      "All Standard features included",
-      "Dedicated account manager",
-      "Custom onboarding and training",
-      "24/7 priority support",
+      "Dedicated manager",
+      "24/7 support",
     ],
   },
 ];
@@ -102,16 +96,16 @@ const perks = [
 
 const faqs = [
   {
-    title: "What happens when my free trial ends?",
-    body: "Your account is simply deactivated. We will never charge you automatically. You can upgrade at any time to reactivate and keep your data.",
+    title: "What happens if I need more than the Starter plan?",
+    body: "You can upgrade to Standard or Business at any time, and your data stays intact.",
   },
   {
-    title: "Can I upgrade before the trial expires?",
-    body: "Yes. You can switch to a paid plan at any point during or after the free trial without losing any of your existing data.",
+    title: "Can I upgrade at any time?",
+    body: "Yes. You can move from Starter to a paid plan whenever you are ready.",
   },
   {
     title: "Are annual plans billed all at once?",
-    body: "Yes, both the Standard ($10) and Business ($20) plans are billed once per year. There are no monthly instalments or hidden fees.",
+    body: "Yes, both the Standard ($10) and Business ($20) plans are billed once per year.",
   },
   {
     title: "Can I downgrade or cancel my plan?",
@@ -166,7 +160,7 @@ export default function Pricing() {
                 marginBottom: 14,
               }}
             >
-              Simple, Transparent Pricing
+              Pricing Plans
             </p>
             <h2
               style={{

@@ -121,8 +121,8 @@ export default function About() {
               }}
               className="about-hero-copy"
             >
-              A modern HR management platform designed to streamline your workforce operations
-              from recruitment to employee management, all in one place.
+              An integrated HR management platform designed to streamline your workforce operations
+              from recruitment to employee management in one stop shop.
             </p>
             <div
               style={{
