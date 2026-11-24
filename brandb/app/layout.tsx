@@ -5,18 +5,19 @@ const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 const withBasePath = (path: string) => `${basePath}${path}`;
 
 export const metadata: Metadata = {
-  title: "Brand B — Smart HR Solutions for Modern Businesses",
+  title: "Brand B HR - Empowering Businesses with Smart HR Solutions",
   description:
-    "Brand B provides end-to-end HR solutions including recruitment, payroll, training, compliance, and employee management for modern businesses.",
-  keywords: "HR solutions, payroll, recruitment, employee management, HR software",
+    "An integrated HR management platform designed to streamline your workforce operations from recruitment to employee management in one stop shop.",
+  keywords: "HR management platform, recruitment, employee management, HR solutions, workforce management",
   icons: {
     icon: withBasePath("/favicon.ico"),
     shortcut: withBasePath("/favicon.ico"),
     apple: withBasePath("/logo.png"),
   },
   openGraph: {
-    title: "Brand B — Smart HR Solutions",
-    description: "End-to-end HR solutions for modern businesses",
+    title: "Brand B HR - Smart HR Solutions",
+    description:
+      "An integrated HR management platform designed to streamline your workforce operations from recruitment to employee management in one stop shop.",
     type: "website",
   },
 };
