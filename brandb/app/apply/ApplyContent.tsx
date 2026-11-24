@@ -7,6 +7,7 @@ import {
   CareersError,
   PublicPosting,
   REFERRER_PARAM,
+  SOURCE_PARAM,
   EMBED_PARAM,
   ROLE_PARAM,
   closingLabel,
@@ -33,6 +34,7 @@ export default function ApplyContent() {
   // Taken from the link and passed through untouched. It is a claim about who referred the
   // candidate, never proof of one, and it grants nothing — the API treats it the same way.
   const referrer = searchParams.get(REFERRER_PARAM);
+  const source = searchParams.get(SOURCE_PARAM);
 
   // Set by the widget loader, which frames this page on a business's own website. It changes only
   // the chrome: the form, the checks and what is sent are identical either way.
@@ -102,7 +104,7 @@ export default function ApplyContent() {
         </Shell>
       )}
 
-      {state.kind === "ready" && <ApplyForm posting={state.posting} referrer={referrer} />}
+      {state.kind === "ready" && <ApplyForm posting={state.posting} referrer={referrer} source={source} />}
     </EmbedContext.Provider>
   );
 }
@@ -110,9 +112,11 @@ export default function ApplyContent() {
 function ApplyForm({
   posting,
   referrer,
+  source,
 }: {
   posting: PublicPosting;
   referrer: string | null;
+  source: string | null;
 }) {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -177,6 +181,7 @@ function ApplyForm({
         cv,
         consentGiven: consent,
         referredByEmployeeId: referrer,
+        source,
         formToken: posting.formToken,
         honeypot,
         // No challenge is configured in the usual case, so there is nothing to collect.

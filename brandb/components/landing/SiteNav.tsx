@@ -28,6 +28,10 @@ export default function SiteNav() {
               {link.label}
             </a>
           ))}
+          {/* A page of its own rather than a section, so it is not in navLinks (those are anchors). */}
+          <a className="lp-nav-link" href={`${basePath}/jobs/`} onClick={close}>
+            Jobs
+          </a>
           {/* The header buttons are hidden on small screens, so these live in the menu there. */}
           <PortalLink className="lp-nav-link lp-nav-mobile-only">Log in</PortalLink>
           <DemoLink className="lp-nav-link lp-nav-mobile-only" showIcon={false} />

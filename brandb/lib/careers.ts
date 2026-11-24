@@ -11,6 +11,8 @@
 export const ROLE_PARAM = "role";
 export const CAREERS_PARAM = "c";
 export const REFERRER_PARAM = "ref";
+/** Which channel the candidate arrived through (portal, share, ...). Sent with the application. */
+export const SOURCE_PARAM = "src";
 
 export interface CareersOpening {
   slug: string;
@@ -176,6 +178,9 @@ export interface ApplicationInput {
   /** From the link, when the candidate arrived through a referral. */
   referredByEmployeeId: string | null;
 
+  /** The channel from the link's `src` parameter, when there was one. */
+  source?: string | null;
+
   /** The token the form was served with, passed back exactly as it was given. */
   formToken: string | null;
 
@@ -205,6 +210,7 @@ export const submitApplication = async (
   if (input.referredByEmployeeId) {
     form.append("referredByEmployeeId", input.referredByEmployeeId);
   }
+  if (input.source) form.append("source", input.source);
   if (input.formToken) form.append("formToken", input.formToken);
   // Always sent, empty for a person. Sending it only when filled would tell a script which field
   // to leave alone.
@@ -281,3 +287,93 @@ export const closingLabel = (closesAt: string | null): string | null => {
  * the page's chrome only — the form, the checks and what is sent are identical either way.
  */
 export const EMBED_PARAM = "embed";
+
+/** One open role on the all-businesses jobs board, with the business it belongs to. */
+export interface JobListing extends CareersOpening {
+  businessName: string;
+  businessLogoUrl: string | null;
+  careersSlug: string;
+}
+
+/**
+ * Every published role across every business.
+ *
+ * Expects `GET /api/public/jobs` to return `{ jobs: JobListing[] }`. Filtering and grouping happen
+ * in the browser: the site is static, and a board of open roles is small enough to hold at once.
+ */
+export const fetchJobs = async (): Promise<JobListing[]> => {
+  if (!isConfigured()) throw unconfigured();
+
+  let response: Response;
+  try {
+    response = await fetch(`${apiBaseUrl()}/api/public/jobs`);
+  } catch {
+    throw new CareersError("network", "We could not reach the job listings. Please try again.");
+  }
+
+  if (!response.ok) throw await failureFor(response);
+
+  const body = (await response.json()) as { jobs?: JobListing[] };
+  return Array.isArray(body.jobs) ? body.jobs : [];
+};
+
+/** Experience bands in the order a filter should offer them. */
+export const EXPERIENCE_OPTIONS = Object.keys(EXPERIENCE_LABELS);
+
+export interface JobFilters {
+  query: string;
+  experience: string;
+  employmentType: string;
+  business: string;
+}
+
+export const EMPTY_FILTERS: JobFilters = {
+  query: "",
+  experience: "",
+  employmentType: "",
+  business: "",
+};
+
+/** Applies the board's filters. Empty fields match everything. */
+export const filterJobs = (jobs: JobListing[], filters: JobFilters): JobListing[] => {
+  const q = filters.query.trim().toLowerCase();
+
+  return jobs.filter((job) => {
+    if (filters.experience && job.experienceLevel !== filters.experience) return false;
+    if (filters.employmentType && job.employmentType !== filters.employmentType) return false;
+    if (filters.business && job.careersSlug !== filters.business) return false;
+    if (q) {
+      const haystack = `${job.jobTitle} ${job.businessName} ${job.summary ?? ""}`.toLowerCase();
+      if (!haystack.includes(q)) return false;
+    }
+    return true;
+  });
+};
+
+export interface BusinessGroup {
+  careersSlug: string;
+  businessName: string;
+  businessLogoUrl: string | null;
+  jobs: JobListing[];
+}
+
+/** Groups roles under their business, businesses sorted by name. */
+export const groupByBusiness = (jobs: JobListing[]): BusinessGroup[] => {
+  const groups = new Map<string, BusinessGroup>();
+
+  for (const job of jobs) {
+    let group = groups.get(job.careersSlug);
+    if (!group) {
+      group = {
+        careersSlug: job.careersSlug,
+        businessName: job.businessName,
+        businessLogoUrl: job.businessLogoUrl,
+        jobs: [],
+      };
+      groups.set(job.careersSlug, group);
+    }
+    group.jobs.push(job);
+  }
+
+  return [...groups.values()].sort((a, b) => a.businessName.localeCompare(b.businessName));
+};
