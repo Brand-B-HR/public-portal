@@ -46,7 +46,7 @@ Copy `brandb/.env.example` to `brandb/.env.local`.
 | Variable | Purpose |
 | --- | --- |
 | `NEXT_PUBLIC_ADMIN_PORTAL_URL` | Admin Portal URL for Log in / Get started. Falls back to `http://localhost:4200` on localhost, else production |
-| `NEXT_PUBLIC_API_BASE_URL` | HR API used by the careers and apply pages |
+| `NEXT_PUBLIC_API_BASE_URL` | HR API used by the careers and apply pages and the landing page's price estimate. The GitHub Pages build reads it from the repository variable of the same name |
 
 ## Commands
 

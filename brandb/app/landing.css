@@ -102,6 +102,29 @@
 .lp-mod[aria-pressed="true"] .lp-tick svg { opacity: 1; }
 .lp-config-foot { margin-top: 16px; padding: 12px 14px; background: var(--lp-bg); border-radius: 12px; font-size: 13px; color: var(--lp-muted); display: flex; gap: 9px; align-items: center; }
 .lp-config-foot svg { color: var(--lp-blue); }
+.lp-mod:disabled { cursor: default; }
+.lp-included { margin-left: auto; font-size: 11px; font-weight: 700; color: var(--lp-green); }
+.lp-config-demo { margin-top: 12px; width: 100%; justify-content: center; }
+
+/* Price estimate */
+.lp-price { margin-top: 16px; padding: 14px; background: var(--lp-bg); border-radius: 14px; }
+.lp-price-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+.lp-price-head h4 { margin: 0; }
+.lp-cycle { display: flex; padding: 3px; background: #fff; border: 1px solid var(--lp-line); border-radius: 999px; }
+.lp-cycle button { padding: 4px 12px; border-radius: 999px; font-size: 12px; font-weight: 600; }
+.lp-cycle button[aria-pressed="true"] { background: var(--lp-navy); color: #fff; }
+.lp-cycle button:focus-visible, .lp-price summary:focus-visible { outline: 3px solid rgba(34, 197, 94, 0.5); outline-offset: 2px; }
+.lp-price-main { margin-top: 8px; font-size: 13px; color: var(--lp-muted); transition: opacity 0.15s; }
+.lp-price-main[aria-busy="true"] { opacity: 0.5; }
+.lp-price-main strong { font-size: 30px; font-weight: 800; letter-spacing: -0.02em; color: var(--lp-text); }
+.lp-price-main small { display: block; font-size: 12.5px; }
+.lp-price-main em { font-style: normal; font-weight: 700; color: var(--lp-green); }
+.lp-price details { margin-top: 10px; font-size: 13px; }
+.lp-price summary { cursor: pointer; font-weight: 600; color: var(--lp-blue); }
+.lp-price ul { list-style: none; padding: 0; margin-top: 8px; display: grid; gap: 5px; }
+.lp-price li { display: flex; justify-content: space-between; gap: 12px; }
+.lp-price li[data-discount="true"] { color: var(--lp-green); font-weight: 700; }
+.lp-price-note { margin-top: 10px; font-size: 12px; color: var(--lp-muted); }
 
 /* Cards */
 .lp-grid { display: grid; gap: 22px; }

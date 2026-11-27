@@ -16,6 +16,8 @@ export interface HrModule {
   description: string;
   features: string[];
   icon: LucideIcon;
+  /** The API's code for a priced service. Absent on core modules, which every subscription includes. */
+  serviceCode?: string;
 }
 
 export const hrModules: HrModule[] = [
@@ -28,6 +30,7 @@ export const hrModules: HrModule[] = [
   },
   {
     shortName: "Attendance",
+    serviceCode: "ATTENDANCE_MANAGEMENT",
     name: "Attendance Management",
     description: "Track presence and working time.",
     features: ["Daily attendance", "Check-in / Check-out", "Working hours"],
@@ -35,6 +38,7 @@ export const hrModules: HrModule[] = [
   },
   {
     shortName: "Leave",
+    serviceCode: "LEAVE_MANAGEMENT",
     name: "Leave Management",
     description: "Time off from request to approval.",
     features: ["Leave requests", "Leave approvals", "Leave balances"],
@@ -42,6 +46,7 @@ export const hrModules: HrModule[] = [
   },
   {
     shortName: "Recruitment",
+    serviceCode: "RECRUITMENT",
     name: "Recruitment Management",
     description: "Hire the right people faster.",
     features: ["Job vacancies", "Candidate management", "Interview scheduling"],
@@ -49,6 +54,7 @@ export const hrModules: HrModule[] = [
   },
   {
     shortName: "Payroll",
+    serviceCode: "PAYROLL_SERVICES",
     name: "Payroll Management",
     description: "Accurate, on-time salary processing.",
     features: ["Salary processing", "Payroll calculations", "Payslips"],
@@ -56,6 +62,7 @@ export const hrModules: HrModule[] = [
   },
   {
     shortName: "Training",
+    serviceCode: "TRAINING_DEVELOPMENT",
     name: "Training & Development",
     description: "Grow skills across your workforce.",
     features: ["Training programs", "Employee development"],
@@ -72,19 +79,22 @@ export const hrModules: HrModule[] = [
 
 export interface CapacityRange {
   label: string;
-  /** Larger organizations are quoted rather than priced from a range. */
-  custom?: boolean;
+  /**
+   * The headcount to price this range at: its upper end. Absent for larger organizations, which are
+   * quoted rather than priced from a range.
+   */
+  employees?: number;
   caption: string;
 }
 
 export const capacityRanges: CapacityRange[] = [
-  { label: "1–10", caption: "Small teams" },
-  { label: "11–25", caption: "Growing teams" },
-  { label: "26–50", caption: "employees" },
-  { label: "51–100", caption: "employees" },
-  { label: "101–250", caption: "employees" },
-  { label: "251–500", caption: "Large organizations" },
-  { label: "500+", custom: true, caption: "Custom quote" },
+  { label: "1–10", employees: 10, caption: "Small teams" },
+  { label: "11–25", employees: 25, caption: "Growing teams" },
+  { label: "26–50", employees: 50, caption: "employees" },
+  { label: "51–100", employees: 100, caption: "employees" },
+  { label: "101–250", employees: 250, caption: "employees" },
+  { label: "251–500", employees: 500, caption: "Large organizations" },
+  { label: "500+", caption: "Custom quote" },
 ];
 
 export const navLinks = [
@@ -118,7 +128,8 @@ export const faqs = [
   },
   {
     question: "Do I have to use every module?",
-    answer: "No. Each module is independent. Select only what you need during registration.",
+    answer:
+      "No. Employee and department management are included in every subscription. Add only the other modules you need.",
   },
   {
     question: "Can I change modules or capacity later?",

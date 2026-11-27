@@ -52,7 +52,7 @@ export default function PricingSection() {
             ))}
           </div>
           <p className="lp-note">
-            Final pricing is shown during registration based on your selections.
+            Online prices are estimates in USD. Your final amount is confirmed during registration.
           </p>
         </div>
       </div>

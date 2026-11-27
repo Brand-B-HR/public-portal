@@ -3,26 +3,44 @@
 import { useState } from "react";
 import { Calculator, Check } from "lucide-react";
 import { capacityRanges, hrModules } from "@/lib/landing-content";
+import type { BillingCycle } from "@/lib/pricing";
+import DemoLink from "./DemoLink";
+import PriceEstimate from "./PriceEstimate";
+
+const defaultServices = ["LEAVE_MANAGEMENT", "PAYROLL_SERVICES"];
 
 /**
- * A non-binding illustration of the registration wizard's capacity and module choices. It holds no
- * pricing and sends nothing anywhere; it exists to show visitors how the product is configured.
+ * A non-binding illustration of the registration wizard's capacity and module choices, with the
+ * price the API would quote for them. Nothing is saved.
  */
 export default function ConfiguratorPreview() {
   const [capacity, setCapacity] = useState(2);
-  const [selected, setSelected] = useState<ReadonlySet<number>>(new Set([0, 2, 4]));
+  const [cycle, setCycle] = useState<BillingCycle>("Monthly");
+  const [selected, setSelected] = useState<ReadonlySet<string>>(new Set(defaultServices));
 
-  const toggleModule = (index: number) =>
+  const toggleService = (code: string) =>
     setSelected((current) => {
       const next = new Set(current);
-      if (!next.delete(index)) next.add(index);
+      if (!next.delete(code)) next.add(code);
       return next;
     });
 
   const range = capacityRanges[capacity];
-  const summary = `${range.label} employees · ${selected.size} of ${hrModules.length} modules selected${
-    range.custom ? " · custom quote" : ""
-  }`;
+  // Catalogue order, so the same selection always makes the same request.
+  const serviceCodes = hrModules.flatMap((m) =>
+    m.serviceCode && selected.has(m.serviceCode) ? [m.serviceCode] : [],
+  );
+  // Core modules have no service code: every subscription includes them.
+  const moduleCount = serviceCodes.length + hrModules.filter((m) => !m.serviceCode).length;
+  const selectionSummary = (
+    <div className="lp-config-foot" role="status">
+      <Calculator size={17} />
+      <span>
+        {range.label} employees · {moduleCount} of {hrModules.length} modules selected
+        {range.employees === undefined && " · custom quote"}
+      </span>
+    </div>
+  );
 
   return (
     <div className="lp-config" aria-label="Interactive preview of choosing capacity and modules">
@@ -48,30 +66,47 @@ export default function ConfiguratorPreview() {
 
       <h4>HR modules</h4>
       <div className="lp-mod-list">
-        {hrModules.map((module, index) => {
+        {hrModules.map((module) => {
           const Icon = module.icon;
+          const code = module.serviceCode;
           return (
             <button
               key={module.name}
               type="button"
               className="lp-mod"
-              aria-pressed={selected.has(index)}
-              onClick={() => toggleModule(index)}
+              aria-pressed={!code || selected.has(code)}
+              disabled={!code}
+              onClick={code ? () => toggleService(code) : undefined}
             >
               <Icon size={17} />
               {module.shortName}
-              <span className="lp-tick">
-                <Check size={11} strokeWidth={3.5} />
-              </span>
+              {code ? (
+                <span className="lp-tick">
+                  <Check size={11} strokeWidth={3.5} />
+                </span>
+              ) : (
+                <span className="lp-included">Included</span>
+              )}
             </button>
           );
         })}
       </div>
 
-      <div className="lp-config-foot" role="status">
-        <Calculator size={17} />
-        <span>{summary}</span>
-      </div>
+      {range.employees === undefined ? (
+        <>
+          {selectionSummary}
+          <DemoLink className="lp-btn lp-btn--dark-outline lp-btn--sm lp-config-demo" />
+        </>
+      ) : (
+        <PriceEstimate
+          employeeCount={range.employees}
+          rangeLabel={range.label}
+          serviceCodes={serviceCodes}
+          cycle={cycle}
+          onCycleChange={setCycle}
+          fallback={selectionSummary}
+        />
+      )}
     </div>
   );
 }

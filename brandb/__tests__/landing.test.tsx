@@ -52,10 +52,13 @@ describe('SiteNav', () => {
   });
 });
 
-describe('ConfiguratorPreview', () => {
+describe('ConfiguratorPreview without an API', () => {
+  beforeEach(() => vi.stubEnv('NEXT_PUBLIC_API_BASE_URL', ''));
+  afterEach(() => vi.unstubAllEnvs());
+
   it('summarises the default selection', () => {
     render(<ConfiguratorPreview />);
-    expect(screen.getByRole('status')).toHaveTextContent('26–50 employees · 3 of 7 modules selected');
+    expect(screen.getByRole('status')).toHaveTextContent('26–50 employees · 4 of 7 modules selected');
   });
 
   it('updates the summary when capacity and modules change', async () => {
@@ -64,10 +67,102 @@ describe('ConfiguratorPreview', () => {
 
     await user.click(screen.getByRole('button', { name: '500+' }));
     await user.click(screen.getByRole('button', { name: /Training/ }));
-    expect(screen.getByRole('status')).toHaveTextContent('500+ employees · 4 of 7 modules selected · custom quote');
+    expect(screen.getByRole('status')).toHaveTextContent('500+ employees · 5 of 7 modules selected · custom quote');
+    expect(screen.getByRole('link', { name: 'Request a demo' })).toBeInTheDocument();
 
-    await user.click(screen.getByRole('button', { name: /Employee/ }));
-    expect(screen.getByRole('status')).toHaveTextContent('3 of 7 modules');
+    await user.click(screen.getByRole('button', { name: /Training/ }));
+    expect(screen.getByRole('status')).toHaveTextContent('4 of 7 modules');
+  });
+
+  it('keeps the core modules switched on', () => {
+    render(<ConfiguratorPreview />);
+    for (const name of [/Employee/, /Department/]) {
+      const core = screen.getByRole('button', { name });
+      expect(core).toBeDisabled();
+      expect(core).toHaveAttribute('aria-pressed', 'true');
+      expect(core).toHaveTextContent('Included');
+    }
+  });
+});
+
+describe('ConfiguratorPreview price estimate', () => {
+  const fetchMock = vi.fn();
+
+  const answerWith = (totalUsd: number, billingCycle = 'Monthly', annualSavingsUsd = 0) => ({
+    ok: true,
+    json: async () => ({
+      billingCycle,
+      lines: [{ lineType: 'Core', description: 'Core platform', amountUsd: 15 }],
+      totalUsd,
+      annualSavingsUsd,
+      trialDays: 30,
+      trialEmployeeLimit: 25,
+    }),
+  });
+
+  const sentRequest = () => JSON.parse(fetchMock.mock.lastCall![1].body as string);
+
+  beforeEach(() => {
+    vi.stubEnv('NEXT_PUBLIC_API_BASE_URL', 'https://api.example.test/');
+    vi.stubGlobal('fetch', fetchMock);
+  });
+
+  afterEach(() => {
+    fetchMock.mockReset();
+    vi.unstubAllEnvs();
+    vi.unstubAllGlobals();
+  });
+
+  it('shows the price the API quotes for the selection', async () => {
+    fetchMock.mockResolvedValue(answerWith(39));
+    render(<ConfiguratorPreview />);
+
+    expect(await screen.findByText('$39.00')).toBeInTheDocument();
+    expect(screen.getByRole('status')).toHaveTextContent('$39.00 per month');
+    expect(screen.getByText(/Free for 30 days/)).toHaveTextContent('up to 25 employees');
+    expect(screen.getByText('Core platform')).toBeInTheDocument();
+    expect(fetchMock.mock.lastCall![0]).toBe('https://api.example.test/api/public/pricing/quote');
+    expect(sentRequest()).toEqual({
+      employeeCount: 50,
+      serviceCodes: ['LEAVE_MANAGEMENT', 'PAYROLL_SERVICES'],
+      billingCycle: 'Monthly',
+    });
+  });
+
+  it('asks again when the selection or billing period changes', async () => {
+    const user = userEvent.setup();
+    fetchMock.mockResolvedValueOnce(answerWith(39)).mockResolvedValue(answerWith(250, 'Annual', 50));
+    render(<ConfiguratorPreview />);
+    await screen.findByText('$39.00');
+
+    await user.click(screen.getByRole('button', { name: '11–25' }));
+    await user.click(screen.getByRole('button', { name: 'Annual' }));
+
+    expect(await screen.findByText('$250.00')).toBeInTheDocument();
+    expect(screen.getByRole('status')).toHaveTextContent('per year11–25 employees · save $50.00 a year');
+    expect(sentRequest()).toMatchObject({ employeeCount: 25, billingCycle: 'Annual' });
+  });
+
+  it('falls back to the selection summary when the API fails', async () => {
+    fetchMock.mockRejectedValue(new TypeError('Failed to fetch'));
+    render(<ConfiguratorPreview />);
+
+    expect(await screen.findByText(/4 of 7 modules selected/)).toBeInTheDocument();
+    expect(document.body.textContent).not.toContain('$');
+  });
+
+  it('asks for no price above the largest range', async () => {
+    const user = userEvent.setup();
+    fetchMock.mockResolvedValue(answerWith(39));
+    render(<ConfiguratorPreview />);
+    await screen.findByText('$39.00');
+    fetchMock.mockClear();
+
+    await user.click(screen.getByRole('button', { name: '500+' }));
+
+    expect(screen.getByRole('status')).toHaveTextContent('custom quote');
+    expect(screen.queryByText('$39.00')).not.toBeInTheDocument();
+    expect(fetchMock).not.toHaveBeenCalled();
   });
 });
 
