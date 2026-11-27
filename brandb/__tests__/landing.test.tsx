@@ -35,8 +35,8 @@ describe('SiteNav', () => {
     for (const link of navLinks) {
       expect(screen.getByRole('link', { name: link.label })).toHaveAttribute('href', link.href);
     }
-    // One in the header buttons, one in the mobile menu (each is shown only at its own breakpoint).
-    expect(screen.getAllByRole('link', { name: 'Log in' })).toHaveLength(2);
+    // The public site has no login: authentication belongs to the Admin Portal.
+    expect(screen.queryByRole('link', { name: 'Log in' })).not.toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Get started free' })).toBeInTheDocument();
   });
 
