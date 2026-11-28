@@ -1,7 +1,7 @@
 import { CheckCircle2, Layers, Rocket } from "lucide-react";
-import ConfiguratorPreview from "./ConfiguratorPreview";
 import DemoLink from "./DemoLink";
 import PortalLink from "./PortalLink";
+import WorkspaceCard from "./WorkspaceCard";
 
 const points = [
   "Choose your own modules",
@@ -45,7 +45,7 @@ export default function HeroSection() {
             ))}
           </div>
         </div>
-        <ConfiguratorPreview />
+        <WorkspaceCard />
       </div>
     </section>
   );

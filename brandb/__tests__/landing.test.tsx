@@ -5,6 +5,7 @@ import Home from '@/app/page';
 import ConfiguratorPreview from '@/components/landing/ConfiguratorPreview';
 import FaqSection from '@/components/landing/FaqSection';
 import SiteNav from '@/components/landing/SiteNav';
+import WorkspaceCard from '@/components/landing/WorkspaceCard';
 import { faqs, hrModules, navLinks } from '@/lib/landing-content';
 import { getAdminPortalUrl } from '@/lib/portal';
 
@@ -163,6 +164,105 @@ describe('ConfiguratorPreview price estimate', () => {
     expect(screen.getByRole('status')).toHaveTextContent('custom quote');
     expect(screen.queryByText('$39.00')).not.toBeInTheDocument();
     expect(fetchMock).not.toHaveBeenCalled();
+  });
+});
+
+describe('WorkspaceCard', () => {
+  const fetchMock = vi.fn();
+  const dialogElement = HTMLDialogElement.prototype;
+  const original = { showModal: dialogElement.showModal, close: dialogElement.close };
+
+  // jsdom has the element but not its methods.
+  beforeAll(() => {
+    dialogElement.showModal = function () {
+      this.open = true;
+    };
+    dialogElement.close = function () {
+      this.open = false;
+    };
+  });
+  afterAll(() => Object.assign(dialogElement, original));
+
+  beforeEach(() => {
+    vi.stubEnv('NEXT_PUBLIC_API_BASE_URL', 'https://api.example.test');
+    vi.stubGlobal('fetch', fetchMock);
+    fetchMock.mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        billingCycle: 'Monthly',
+        lines: [],
+        totalUsd: 9,
+        annualSavingsUsd: 0,
+        trialDays: 30,
+        trialEmployeeLimit: 25,
+      }),
+    });
+  });
+
+  afterEach(() => {
+    fetchMock.mockReset();
+    vi.unstubAllEnvs();
+    vi.unstubAllGlobals();
+  });
+
+  it('lists the modules as information, with the API\'s starting price and trial', async () => {
+    render(<WorkspaceCard />);
+
+    expect(await screen.findByText('$9.00')).toBeInTheDocument();
+    expect(screen.getByText('30-day free trial')).toBeInTheDocument();
+    expect(screen.getAllByRole('listitem').map((item) => item.textContent)).toEqual([
+      'Employee Management',
+      'Department Management',
+      'Attendance',
+      'Leave',
+      'Recruitment',
+      'Payroll',
+      'Training & Development',
+    ]);
+    // Nothing to select here: opening the popup is the only action.
+    expect(screen.getAllByRole('button')).toHaveLength(1);
+    expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toEqual({
+      employeeCount: 10,
+      serviceCodes: [],
+      billingCycle: 'Monthly',
+    });
+  });
+
+  it('opens the configurator in a popup and keeps the choices after closing it', async () => {
+    const user = userEvent.setup();
+    render(<WorkspaceCard />);
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+
+    await user.click(await screen.findByRole('button', { name: 'Estimate your price' }));
+    const dialog = screen.getByRole('dialog', { name: 'Build your HR workspace' });
+    await user.click(within(dialog).getByRole('button', { name: /Training/ }));
+    await user.click(within(dialog).getByRole('button', { name: 'Close' }));
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: 'Estimate your price' }));
+    expect(screen.getByRole('button', { name: /Training/ })).toHaveAttribute('aria-pressed', 'true');
+  });
+
+  it('closes on a click on the backdrop, not on one inside the popup', async () => {
+    const user = userEvent.setup();
+    render(<WorkspaceCard />);
+    await user.click(screen.getByRole('button', { name: /Estimate your price|Build your workspace/ }));
+    const dialog = screen.getByRole('dialog');
+
+    await user.click(within(dialog).getByText('Employee capacity'));
+    expect(dialog).toHaveAttribute('open');
+
+    await user.click(dialog);
+    expect(dialog).not.toHaveAttribute('open');
+  });
+
+  it('shows no figures when the API cannot be reached', async () => {
+    fetchMock.mockRejectedValue(new TypeError('Failed to fetch'));
+    render(<WorkspaceCard />);
+
+    await vi.waitFor(() => expect(fetchMock).toHaveBeenCalled());
+    expect(screen.getByRole('button', { name: 'Build your workspace' })).toBeInTheDocument();
+    expect(document.body.textContent).not.toMatch(/\$|free trial/);
   });
 });
 

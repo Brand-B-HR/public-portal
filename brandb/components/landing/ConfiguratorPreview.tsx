@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Calculator, Check } from "lucide-react";
+import { Calculator, Check, X } from "lucide-react";
 import { capacityRanges, hrModules } from "@/lib/landing-content";
 import type { BillingCycle } from "@/lib/pricing";
 import DemoLink from "./DemoLink";
@@ -13,7 +13,7 @@ const defaultServices = ["LEAVE_MANAGEMENT", "PAYROLL_SERVICES"];
  * A non-binding illustration of the registration wizard's capacity and module choices, with the
  * price the API would quote for them. Nothing is saved.
  */
-export default function ConfiguratorPreview() {
+export default function ConfiguratorPreview({ onClose }: { onClose?: () => void }) {
   const [capacity, setCapacity] = useState(2);
   const [cycle, setCycle] = useState<BillingCycle>("Monthly");
   const [selected, setSelected] = useState<ReadonlySet<string>>(new Set(defaultServices));
@@ -47,6 +47,11 @@ export default function ConfiguratorPreview() {
       <div className="lp-config-head">
         <strong>Build your HR workspace</strong>
         <span>Preview</span>
+        {onClose && (
+          <button type="button" className="lp-config-close" aria-label="Close" onClick={onClose}>
+            <X size={18} />
+          </button>
+        )}
       </div>
 
       <h4>Employee capacity</h4>
